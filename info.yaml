@@ -30,10 +30,10 @@ pinout:
   ui[4]: ""
   ui[5]: ""
   ui[6]: ""
-  ui[7]: ""
+  ui[7]: "RX"
 
   # Outputs
-  uo[0]: ""
+  uo[0]: "TX"
   uo[1]: ""
   uo[2]: ""
   uo[3]: ""

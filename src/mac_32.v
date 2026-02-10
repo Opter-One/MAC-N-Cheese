@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// A mac module that performs count time multiplications
- module mac#(parameter COUNT = 4) (
+// The final MAC using 32 bits
+ module mac_32#(parameter COUNT = 4) (
     input wire clk,          // Clock signal
     input wire rst_n,        // Active low reset signal
     input wire ena,          // Enable signal (active high)
-    input wire [7:0] input_1,  // 8-bit input from dedicated input
-    input wire [7:0] input_2, // 8-bit input from IO input
-    output wire [19:0] mac_out  // 8-bit output to dedicated output
+    input wire [19:0] input_1,  // 8-bit input from dedicated input
+    input wire [19:0] input_2, // 8-bit input from IO input
+    output wire [40:0] mac_out  // 8-bit output to dedicated output
  );
     // Wire declarations for internal logic
     // 32 bits accumulatore to hold the result of the multiplication
-    reg [19:0] accumulator, out;
+    reg [40:0] accumulator, out;
     reg [3:0] counter; // Counter to keep track of the number of multiplications
 
     always @(posedge clk or negedge rst_n) begin
