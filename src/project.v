@@ -4,6 +4,7 @@
  */
 
 `default_nettype none
+`include "mac.v"
 
 module tt_um_mac_n_cheese (
     input  wire [7:0] ui_in,    // Dedicated inputs
@@ -21,32 +22,16 @@ module tt_um_mac_n_cheese (
   
   // List all unused inputs to prevent warnings
   wire _unused = &{1'b0};
+  wire [31:0] sample_o;
 
-  // Wire declarations for internal logic
-  // 32 bits accumulatore to hold the result of the multiplication
-  reg [31:0] accumulator = 0, sample_o;
-  reg [3:0] counter = 0; // Counter to keep track of the number of multiplications
-
-  always @(posedge clk or negedge rst_n) begin
-    if(~rst_n) begin
-      accumulator <= 0;
-      sample_o <= 0;
-      counter <= 0;
-    end else if (ena) begin
-      // After 8 multiplications, output the result and reset the accumulator and counter
-      if (counter == 7) begin
-        sample_o <= (accumulator + (ui_in * uio_in)); // Output the least significant byte of the result
-        accumulator <= 0; // Reset the accumulator for the next round of multiplications
-        counter <= 0; // Reset the counter
-      end else begin
-        sample_o <= 0; // Clear the output until we have a valid result
-        // Perform multiplication and accumulate the result
-        accumulator <= accumulator + (ui_in * uio_in);
-        // Increment the counter
-        counter <= counter + 1;
-      end
-    end
-  end
+  mac #(.COUNT(8)) mac_inst (
+    .clk(clk),
+    .rst_n(rst_n),
+    .ena(ena),
+    .input_1(ui_in),
+    .input_2(uio_in),
+    .mac_out(sample_o)
+  );
 
   assign uo_out = sample_o[31:24]; // Output the most significant byte of the accumulated result
 
