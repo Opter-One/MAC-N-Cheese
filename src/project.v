@@ -18,8 +18,10 @@ module tt_um_mac_n_cheese (
     input  wire       rst_n     // reset_n - low to reset
 );
   
+  assign uio_out = 8'b0; // Unused output, set to 0
+  assign uio_oe = 8'b0; // Unused output enable, set
   // List all unused inputs to prevent warnings
-  wire _unused = &{uio_out, uio_oe, uio_in, 1'b0};
+  wire _unused = &{uio_in, 1'b0};
   
   // Internal wires and registers
   wire [19:0] out1, out2; // Intermediate outputs from the MAC units
@@ -48,7 +50,7 @@ module tt_um_mac_n_cheese (
     .clk(clk),
     .rst_n(rst_n),
     .ena(ena),
-    .input_1(out2),
+    .input_1(out1),
     .input_2(out2),
     .mac_out(sample_o)
   );
