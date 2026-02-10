@@ -5,7 +5,6 @@
 
 `default_nettype none
 `include "mac.v"
-`include "mac_32.v"
 
 module tt_um_mac_n_cheese (
     input  wire [7:0] ui_in,    // Dedicated inputs
@@ -24,8 +23,8 @@ module tt_um_mac_n_cheese (
   wire _unused = &{uio_in, 1'b0};
   
   // Internal wires and registers
-  wire [19:0] out1, out2; // Intermediate outputs from the MAC units
-  wire [40:0] sample_o; // Output from the final MAC unit
+  wire [20:0] out1, out2; // Intermediate outputs from the MAC units
+  wire [20:0] sample_o; // Output 
   wire [7:0] input2 = ui_in;
 
   mac #(.COUNT(8)) mac_1_paral (
@@ -46,15 +45,8 @@ module tt_um_mac_n_cheese (
     .mac_out(out2)
   );
 
-    mac_32 #(.COUNT(8)) mac_last (
-    .clk(clk),
-    .rst_n(rst_n),
-    .ena(ena),
-    .input_1(out1),
-    .input_2(out2),
-    .mac_out(sample_o)
-  );
+  assign sample_o = out1 + out2; // Accumulate the results of the two MAC units
 
-  assign uo_out = sample_o[40:33]; // Output the most significant byte of the accumulated result
+  assign uo_out = sample_o[20:13]; // Output the most significant byte of the accumulated result
 
 endmodule

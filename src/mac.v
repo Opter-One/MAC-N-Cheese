@@ -10,11 +10,11 @@
     input wire ena,          // Enable signal (active high)
     input wire [7:0] input_1,  // 8-bit input from dedicated input
     input wire [7:0] input_2, // 8-bit input from IO input
-    output wire [19:0] mac_out  // 8-bit output to dedicated output
+    output wire [20:0] mac_out  // 8-bit output to dedicated output
  );
     // Wire declarations for internal logic
     // 32 bits accumulatore to hold the result of the multiplication
-    reg [19:0] accumulator, out;
+    reg [20:0] accumulator, out;
     reg [3:0] counter; // Counter to keep track of the number of multiplications
 
     always @(posedge clk or negedge rst_n) begin
